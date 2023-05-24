@@ -1,0 +1,66 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+#include <string.h>
+
+#define MAX_CHOIX 3
+#define MAX_LENGTH 10
+
+char choix_possibles[MAX_CHOIX][MAX_LENGTH] = {"pierre", "feuille", "ciseaux"};
+int score_joueur = 0;
+int score_ordi = 0;
+int parties = 0;
+
+void afficher_choix_possibles() {
+    printf("Choisissez :\n");
+    for (int i = 0; i < MAX_CHOIX; i++) {
+        printf("%d. %s\n", i + 1, choix_possibles[i]);
+    }
+}
+
+int main() {
+    srand(time(0));
+
+    printf("----- Nouvelle partie -----\n");
+
+    afficher_choix_possibles();
+    int choix_joueur;
+    printf("Votre choix (1-3) : ");
+    scanf("%d", &choix_joueur);
+
+    if (choix_joueur < 1 || choix_joueur > MAX_CHOIX) {
+        printf("Choix invalide. Veuillez choisir un nombre entre 1 et %d.\n", MAX_CHOIX);
+        return 0;
+    }
+
+    int choix_ordi = rand() % MAX_CHOIX;
+
+    printf("Vous avez choisi : %s\n", choix_possibles[choix_joueur - 1]);
+    printf("L'ordinateur a choisi : %s\n", choix_possibles[choix_ordi]);
+
+    if (choix_joueur - 1 == choix_ordi) {
+        printf("Égalité !\n");
+    } else if ((choix_joueur - 1 == 0 && choix_ordi == 2) || (choix_joueur - 1 == 1 && choix_ordi == 0) || (choix_joueur - 1 == 2 && choix_ordi == 1)) {
+        printf("Vous avez gagné la partie !\n");
+        score_joueur++;
+    } else {
+        printf("L'ordinateur a gagné la partie !\n");
+        score_ordi++;
+    }
+
+    parties++;
+
+    char choix_continuer[MAX_LENGTH];
+    printf("Voulez-vous continuer ? (Oui/Non) : ");
+    scanf("%s", choix_continuer);
+    if (strcmp(choix_continuer, "oui") != 0) {
+        // Affiche les statistiques finales
+        printf("Nombre total de parties : %d\n", parties);
+        printf("Score final - Joueur : %d\n", score_joueur);
+        printf("Score final - Ordinateur : %d\n", score_ordi);
+    } else {
+        main();
+    }
+
+    return 0;
+}
